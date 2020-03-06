@@ -1,0 +1,54 @@
+﻿@page "/usuarios"
+
+@using GerenciadorUsuarioClient.Services
+@inject IUsuarioService UsuarioService
+@inject NavigationManager NavigationManager
+
+<h1>Usuários</h1>
+
+<p>Estes são usuários cadastrados no sistema</p>
+
+@if (usuarios == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Sobrenome</th>
+                <th>Data de Nascimento</th>
+                <th>Data de Cadastro</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var usuario in usuarios)
+            {
+                <tr>
+                    <td>@usuario.IdUsuario</td>
+                    <td>@usuario.Nome</td>
+                    <td>@usuario.Sobrenome</td>
+                    <td>@usuario.DataNascimento</td>
+                    <td>@usuario.DataCadastro</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    public UserLibrary.Usuario[] usuarios;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var usuariosApi = await UsuarioService.ListarUsuariosAsync();
+        usuarios = usuariosApi;
+
+        //string CompleteUrl = $"{baseUrl}api/usuarios";
+        //usuarios = await _httpClient.GetJsonAsync<UserLibrary.Usuario[]>(CompleteUrl);
+
+    }
+}
